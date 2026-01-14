@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuizMaster - Pattao National High School</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet"/>
+
+  <style>
+    :root {
+      --brand-maroon: #800000;
+      --brand-gold: #D4AF37;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(180deg, #fffaf7 0%, #ffffff 100%);
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex justify-center items-center">
+  <div class="max-w-3xl w-full bg-white p-6 rounded shadow">
+
+    <h1 class="text-3xl font-bold text-center text-[var(--brand-maroon)]">
+      QuizMaster
+    </h1>
+    <p class="text-center mb-6">Pattao National High School</p>
+
+    <!-- INPUT DETAILS -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <input id="studentName" class="border p-2 rounded" placeholder="Student Name">
+      <input id="teacherName" class="border p-2 rounded" placeholder="Teacher Name">
+      <input id="subject" class="border p-2 rounded" placeholder="Subject">
+    </div>
+
+    <!-- QUIZ -->
+    <form id="quizForm" class="space-y-4"></form>
+
+    <button onclick="submitQuiz()" type="button"
+      class="w-full mt-6 bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+      Submit Quiz
+    </button>
+
+    <!-- RESULT -->
+    <div id="result" class="hidden mt-6 p-4 bg-gray-100 rounded"></div>
+
+    <footer class="text-center mt-6 text-gray-500 text-sm">
+      © 2025 Reynaldo P. Usigan, Mylene A. Baquiran, Queen Jamel Bautista
+    </footer>
+  </div>
+
+<script>
+  // QUESTION BANK
+  const QUESTION_BANK = [
+    {
+      q: "What does ICT stand for?",
+      options: [
+        "Information and Communication Technology",
+        "Internet and Computer Technique",
+        "Information Computer Technology",
+        "Integrated Communication Tool"
+      ],
+      answer: 0
+    },
+    {
+      q: "Which device is used to input data into a computer?",
+      options: ["Monitor", "Printer", "Keyboard", "Speaker"],
+      answer: 2
+    },
+    {
+      q: "What part of the computer is the brain?",
+      options: ["RAM", "Hard Drive", "Motherboard", "CPU"],
+      answer: 3
+    },
+    {
+      q: "Which is system software?",
+      options: ["Word", "Windows OS", "Chrome", "Photoshop"],
+      answer: 1
+    },
+    {
+      q: "What does RAM stand for?",
+      options: ["Read Access Memory", "Random Access Memory", "Run All Memory", "Readable Active Memory"],
+      answer: 1
+    },
+    {
+      q: "Which device produces a hard copy?",
+      options: ["Monitor", "Printer", "Keyboard", "Mouse"],
+      answer: 1
+    },
+    {
+      q: "What connects a computer to the internet?",
+      options: ["Scanner", "Modem", "Flash Drive", "Speaker"],
+      answer: 1
+    },
+    {
+      q: "What does WWW stand for?",
+      options: ["World Wide Web", "Wide World Web", "Web World Wide", "World Web Window"],
+      answer: 0
+    },
+    {
+      q: "Which is a web browser?",
+      options: ["Excel", "Google Chrome", "Windows", "Android"],
+      answer: 1
+    },
+    {
+      q: "Purpose of a firewall?",
+      options: ["Cool computer", "Protect from unauthorized access", "Speed up PC", "Store files"],
+      answer: 1
+    }
+  ];
+
+  // LOAD QUESTIONS
+  const quizForm = document.getElementById("quizForm");
+
+  QUESTION_BANK.forEach((item, index) => {
+    const div = document.createElement("div");
+    div.innerHTML = `
+      <p class="font-semibold">${index + 1}. ${item.q}</p>
+      ${item.options.map((opt, i) => `
+        <label class="block">
+          <input type="radio" name="q${index}" value="${i}"> ${opt}
+        </label>
+      `).join("")}
+    `;
+    quizForm.appendChild(div);
+  });
+
+  // SUBMIT QUIZ
+  function submitQuiz() {
+    const student = studentName.value.trim();
+    const teacher = teacherName.value.trim();
+    const subjectVal = subject.value.trim();
+
+    if (!student || !teacher || !subjectVal) {
+      alert("Please fill out all fields.");
+      return;
+    }
+
+    let score = 0;
+
+    QUESTION_BANK.forEach((q, i) => {
+      const selected = document.querySelector(`input[name="q${i}"]:checked`);
+      if (selected && Number(selected.value) === q.answer) {
+        score++;
+      }
+    });
+
+    const percentage = ((score / QUESTION_BANK.length) * 100).toFixed(2);
+
+    const resultDiv = document.getElementById("result");
+    resultDiv.classList.remove("hidden");
+    resultDiv.innerHTML = `
+      <h2 class="text-xl font-bold mb-2">Quiz Result</h2>
+      <p><strong>Student:</strong> ${student}</p>
+      <p><strong>Teacher:</strong> ${teacher}</p>
+      <p><strong>Subject:</strong> ${subjectVal}</p>
+      <p class="mt-2"><strong>Score:</strong> ${score} / 10</p>
+      <p><strong>Percentage:</strong> ${percentage}%</p>
+    `;
+  }
+</script>
+
+</body>
+</html>
